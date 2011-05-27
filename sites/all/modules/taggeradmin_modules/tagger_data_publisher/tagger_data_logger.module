@@ -1,0 +1,50 @@
+<?php
+/**
+ * @file
+ * This is the file description for Tagger Data Logger module.
+ *
+ * In this more verbose, multi-line description, you can specify what this
+ * file does exactly. Make sure to wrap your documentation in column 78 so
+ * that the file can be displayed nicely in default-sized consoles.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function tagger_data_logger_menu() {
+  $items = array();
+
+  // Type '$item ⇥' to create a new menu item.
+
+  return $items;
+}
+
+
+/**
+ * Implements hook_taxonomy_term_delete().
+ */
+function tagger_data_logger_taxonomy_term_delete($term) {
+  dsm('delete');
+  dsm($term);
+}
+
+/**
+ * Implements hook_taxonomy_term_insert().
+ */
+function tagger_data_logger_taxonomy_term_insert($term) {
+  dsm('insert');
+  dsm($term);
+}
+
+/**
+ * Implements hook_taxonomy_term_update().
+ */
+function tagger_data_logger_taxonomy_term_update($term) {
+  dsm('update');
+  dsm($term);
+}
+
+
+
+
+

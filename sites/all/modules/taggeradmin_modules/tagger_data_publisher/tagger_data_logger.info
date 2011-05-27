@@ -1,0 +1,23 @@
+name = Tagger Data Logger
+description = "This module logs changes to the dataset"
+
+; Core version (required)
+core = 7.x
+
+; Package name (see http://drupal.org/node/542202 for a list of names)
+package = Tagger
+
+
+
+; Module dependencies
+dependencies[] = taxonomy
+; dependencies[] = theirmodule (1.2)
+; dependencies[] = anothermodule (>=2.4)
+; dependencies[] = views (3.x)
+
+; Configuration page
+configure = admin/config/tagger_data_publisher
+
+
+; For further information about configuration options, see
+; - http://drupal.org/node/542202

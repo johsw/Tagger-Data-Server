@@ -1,0 +1,26 @@
+name = Tagger Data Publisher
+description = "This module publishes logged chages to the dataset"
+
+; Core version (required)
+core = 7.x
+
+; Package name (see http://drupal.org/node/542202 for a list of names)
+package = Tagger
+
+; PHP version requirement (optional)
+; php = 5.2
+
+; Module dependencies
+dependencies[] = taxonomy
+dependencies[] = tagger_data_publisher
+
+; dependencies[] = theirmodule (1.2)
+; dependencies[] = anothermodule (>=2.4)
+; dependencies[] = views (3.x)
+
+; Configuration page
+configure = admin/config/tagger_data_publisher
+
+
+; For further information about configuration options, see
+; - http://drupal.org/node/542202
