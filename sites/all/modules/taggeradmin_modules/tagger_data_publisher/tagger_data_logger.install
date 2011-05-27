@@ -1,0 +1,65 @@
+<?php
+
+/**
+ * Implements hook_schema().
+ */
+function tagger_data_logger_schema() {
+  $schema['tagger_data_log'] = array(
+    'description' => 'TODO: please describe this table!',
+    'fields' => array(
+      'logid' => array(
+        'description' => 'TODO: please describe this field!',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'action' => array(
+        'description' => 'TODO: please describe this field!',
+        'type' => 'char',
+        'length' => '255',
+        'not null' => TRUE,
+      ),
+      'uri' => array(
+        'description' => 'TODO: please describe this field!',
+        'type' => 'char',
+        'length' => '255',
+        'not null' => TRUE,
+      ),
+      'tid' => array(
+        'description' => 'TODO: please describe this field!',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'vid' => array(
+        'description' => 'TODO: please describe this field!',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'name' => array(
+        'description' => 'TODO: please describe this field!',
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+      ),
+      'links' => array(
+        'description' => 'TODO: please describe this field!',
+        'type' => 'text',
+        'not null' => TRUE,
+      ),
+      'synonyms' => array(
+        'description' => 'TODO: please describe this field!',
+        'type' => 'text',
+        'not null' => TRUE,
+      ),
+    ),
+    'primary key' => array('logid'),
+    'indexes' => array(
+      'action' => array('action'),
+      'uri' => array('uri'),
+      'vid' => array('vid'),
+    ),
+  );
+
+  return $schema;
+}
+
