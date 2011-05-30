@@ -8,43 +8,81 @@
  * that the file can be displayed nicely in default-sized consoles.
  */
 
-/**
- * Implements hook_menu().
- */
-function tagger_data_logger_menu() {
-  $items = array();
-
-  // Type '$item ⇥' to create a new menu item.
-
-  return $items;
-}
-
 
 /**
  * Implements hook_taxonomy_term_delete().
  */
 function tagger_data_logger_taxonomy_term_delete($term) {
-  dsm('delete');
-  dsm($term);
+  $data = tagger_data_logger_build_data_object($term, 'delete');
+  db_insert('tagger_data_log')->fields($data)->execute();
 }
 
 /**
  * Implements hook_taxonomy_term_insert().
  */
 function tagger_data_logger_taxonomy_term_insert($term) {
-  dsm('insert');
-  dsm($term);
+  $data = tagger_data_logger_build_data_object($term, 'create');
+  db_insert('tagger_data_log')->fields($data)->execute();
 }
 
 /**
  * Implements hook_taxonomy_term_update().
  */
 function tagger_data_logger_taxonomy_term_update($term) {
-  dsm('update');
-  dsm($term);
+  $data = tagger_data_logger_build_data_object($term, 'update');
+  db_insert('tagger_data_log')->fields($data)->execute();
 }
 
+function tagger_data_logger_build_data_object($term, $action) {
+  if (!in_array($action, array('create', 'update', 'delete'))) { return false; }
+  if (in_array($action, array('create', 'update'))) {
+    $links    = tagger_data_logger_build_data_links($term);
+    $synonyms = tagger_data_logger_build_data_array($term->field_synonyms['und']);
+    $related  = tagger_data_logger_build_data_array($term->field_relatedwords['und']);
+  }
+  if ($action == 'delete') {
+    $links    = '';
+    $synonyms = '';
+    $related  = '';
+  }
+  $fields = array(
+    'action' => $action, 
+    'uri' => $GLOBALS['base_url'] .'/'. $term->tid,
+    'tid' => $term->tid,
+    'vid' => $term->vid,
+    'name' => $term->name,
+    'links' => $links,
+    'synonyms' => $synonyms,
+    'related' => $related,    
+  );
+  return $fields;
+}
 
+function tagger_data_logger_build_data_array($input) {
+  $array = array();
+  foreach ($input AS $value) {
+    $array[] = $value['value'];
+  }
+  return json_encode($array);
+}
 
+function tagger_data_logger_build_data_links($term) {
+  $links = array();
+  foreach($term AS $name => $element) {
+    if(tagger_data_logger_is_link_field($name, $element) && !empty($element['und'][0]['value'])) {
+      $links[substr($name, 6)] = $element['und'][0]['value'];
+    }
+  }
+  if(!$links) { return false; }
+  return json_encode($links);
+}
 
+function tagger_data_logger_is_link_field($name, $element) {
+  if (is_array($element) && isset($element['und']) && is_array($element['und'])) {
+    if (substr($name, 0, 5) == 'field' && !in_array(substr($name, 6), array('relatedwords', 'synonyms'))) {
+      return TRUE;
+    }
+  }
+  return FALSE;
+}
 
