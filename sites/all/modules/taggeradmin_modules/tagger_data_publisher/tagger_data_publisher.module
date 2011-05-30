@@ -14,7 +14,41 @@
 function tagger_data_publisher_menu() {
   $items = array();
 
-  // Type '$item ⇥' to create a new menu item.
-
+  $items['taggeradmin_log'] = array(
+    'title' => 'Log',
+    'description' => 'This page returns the contents of the logs',
+    'page callback' => 'tagger_data_publisher_menu_page',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
   return $items;
+}
+
+function tagger_data_publisher_menu_page($no_items = 10, $action = 'all', $vids = 'all', $starting_point = '0') {
+  if (!ctype_digit($vid)) {
+    return tagger_data_publisher_error('Invalid number of items: '. $no_items);
+  }
+  if ($no_items > 200) {
+    $no_items = 200;
+  }
+  if(!in_array($action, array('create', 'update', 'delete', 'all'))) {
+    return tagger_data_publisher_error('Invalid action: '. $action);
+  }
+  $validated_vids = array();
+
+  foreach(explode('|', $vids) AS $vid) {
+    if (ctype_digit($vid)) {
+      $validateed_vids[] = $vid;
+    }
+  }
+  if (!ctype_digit($starting_point)) {
+    return tagger_data_publisher_error('Invalid starting point: '. $starting_point);
+  }
+  return;
+}
+
+
+function tagger_data_publisher_error($text) {
+  print "Error: ". $text; 
+  exit;
 }

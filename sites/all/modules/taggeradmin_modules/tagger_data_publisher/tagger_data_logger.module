@@ -85,4 +85,3 @@ function tagger_data_logger_is_link_field($name, $element) {
   }
   return FALSE;
 }
-
