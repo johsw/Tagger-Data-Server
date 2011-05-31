@@ -63,7 +63,7 @@ function tagger_data_logger_build_data_array($input) {
   foreach ($input AS $value) {
     $array[] = $value['value'];
   }
-  return json_encode($array);
+  return serialize($array);
 }
 
 function tagger_data_logger_build_data_links($term) {
@@ -74,7 +74,7 @@ function tagger_data_logger_build_data_links($term) {
     }
   }
   if(!$links) { return false; }
-  return json_encode($links);
+  return serialize($links);
 }
 
 function tagger_data_logger_is_link_field($name, $element) {

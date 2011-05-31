@@ -25,7 +25,7 @@ function tagger_data_publisher_menu() {
 }
 
 function tagger_data_publisher_menu_page($no_items = 10, $action = 'all', $vids = 'all', $starting_point = '0') {
-  if (!ctype_digit($vid)) {
+  if (!ctype_digit($no_items)) {
     return tagger_data_publisher_error('Invalid number of items: '. $no_items);
   }
   if ($no_items > 200) {
@@ -38,13 +38,41 @@ function tagger_data_publisher_menu_page($no_items = 10, $action = 'all', $vids 
 
   foreach(explode('|', $vids) AS $vid) {
     if (ctype_digit($vid)) {
-      $validateed_vids[] = $vid;
+      $validated_vids[] = $vid;
     }
   }
   if (!ctype_digit($starting_point)) {
     return tagger_data_publisher_error('Invalid starting point: '. $starting_point);
   }
-  return;
+  $sql = 'SELECT * FROM {tagger_data_log} WHERE logid > :logid';
+  $args = array(':logid' => $starting_point);
+  
+  if($action != 'all') {
+    $sql .= ' && action = :action';
+    $args[':action'] = $action;
+  }
+  if(count($validated_vids) > 0) {
+    if(count($validated_vids) > 1) {
+      $sql .= ' && vid IN (:vids)';
+      $args[':vids'] = $validated_vids;
+    }
+    if(count($validated_vids) == 1) {
+      $sql .= ' && vid = :vids';
+      $args[':vids'] = $validated_vids[0];
+    }
+  }
+  $sql .= ' ORDER BY logid ASC';
+  $result = db_query_range($sql, 0, $no_items, $args);
+  $data = array();
+  foreach ($result as $record) {
+    $temp = $record;
+    $temp->synonyms = unserialize($record->synonyms);
+    $temp->related = unserialize($record->related);
+    $temp->links = unserialize($record->links); 
+    $data[] =$temp;
+  }
+  
+  return drupal_json_output($data);
 }
 
 
